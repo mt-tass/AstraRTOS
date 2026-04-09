@@ -11,7 +11,7 @@ SIZE = $(PREFIX)size 	   # prints table with sizes
 TARGET = astra
 BUILD = build
 
-C_SOURCES = app/main.c
+C_SOURCES = app/main.c kernel/port/system_init.c
 AS_SOURCES = kernel/port/startup_stm32f429zi.s 
 
 LDSCRIPT = link/stm32f429zi.ld 
