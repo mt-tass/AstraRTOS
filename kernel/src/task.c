@@ -1,4 +1,5 @@
 #include "task.h"
+#define SHPR3 (*(volatile uint8_t *)0xE000ED22)  /*sets PendSV priority*/
 
 os_tcb_t os_tasks[OS_MAX_TASKS_NUM];
 uint32_t os_task_stacks[OS_MAX_TASKS_NUM][OS_TASK_STACK_SIZE];
@@ -29,4 +30,16 @@ int os_task_create(void (*task_function)(void)){
     }
     os_task_count += 1;
     return 0;
+}
+
+void os_schedule_next_task(void){
+    if (os_task_count > 0) {
+        int next_task = (os_current_task_ptr->task_num + 1) % os_task_count;
+        os_current_task_ptr = &os_tasks[next_task];
+    }
+}
+
+void os_start(void) {
+    SHPR3 = 255;              /*sets PendSV to lowest priority*/
+    __asm volatile ("svc 0"); /*triggers SVC*/
 }

@@ -69,8 +69,6 @@ hang:
 .weak MemManage_Handler
 .weak BusFault_Handler
 .weak UsageFault_Handler
-.weak SVC_Handler
-.weak PendSV_Handler
 .weak SysTick_Handler
 
 NMI_Handler:
@@ -78,7 +76,37 @@ HardFault_Handler:
 MemManage_Handler:
 BusFault_Handler:
 UsageFault_Handler:
-SVC_Handler:
-PendSV_Handler:
 SysTick_Handler:
     b .
+
+.extern os_current_task_ptr
+.extern os_schedule_next_task
+.global SVC_Handler
+.type SVC_Handler, %function
+SVC_Handler:
+    ldr r3, =os_current_task_ptr
+    ldr r1, [r3]
+    ldr r0, [r1]
+    ldmia r0!, {r4-r11}
+    msr psp, r0
+    mov r0, #0
+    msr basepri, r0
+    ldr r14, =0xFFFFFFFD
+    bx r14
+.global PendSV_Handler
+.type PendSV_Handler, %function
+PendSV_Handler:
+    mrs r0, psp
+    stmdb r0!, {r4-r11}
+    ldr r1, =os_current_task_ptr
+    ldr r2, [r1]
+    str r0, [r2]
+    push {r14}
+    bl os_schedule_next_task
+    pop {r14}
+    ldr r1, =os_current_task_ptr
+    ldr r2, [r1]
+    ldr r0, [r2]
+    ldmia r0!, {r4-r11}
+    msr psp, r0
+    bx r14

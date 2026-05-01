@@ -12,7 +12,9 @@ typedef struct {
 } os_tcb_t;
 
 extern os_tcb_t *os_current_task_ptr;
+extern void os_schedule_next_task(void);
 
 int os_task_create(void (*task_fucntion)(void));
+void os_start(void);
 
 #endif
