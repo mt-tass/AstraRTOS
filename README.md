@@ -7,6 +7,7 @@ Minimal RTOS built from scratch for STM32F429ZI (Cortex-M4)
 ### Requirements
 - `arm-none-eabi-gcc`
 - `openocd` (not confirmed for now)
+- `qemu-system-arm` (for make qemu)
 
 ### Commands
 ```
