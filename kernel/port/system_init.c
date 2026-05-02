@@ -1,4 +1,5 @@
 #include "system_init.h"
+#define ICSR (*((volatile uint32_t *)0xE000ED04))
 
 volatile uint32_t system_ticks = 0;
 
@@ -45,5 +46,6 @@ void systick_init(void){
 }
 
 void SysTick_Handler(void){
-    system_ticks++;  // update every 1ms
+    system_ticks++;    // update every 1ms
+    ICSR |= (1 << 28); // trigger PendSV
 }

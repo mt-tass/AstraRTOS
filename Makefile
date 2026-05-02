@@ -9,7 +9,7 @@ SIZE = $(PREFIX)size 	   # prints table with sizes
 TARGET = astra
 BUILD = build
 
-C_SOURCES = app/main.c kernel/port/system_init.c drivers/src/rcc.c drivers/src/uart.c drivers/src/gpio.c
+C_SOURCES = app/main.c kernel/port/system_init.c drivers/src/rcc.c drivers/src/uart.c drivers/src/gpio.c kernel/src/task.c
 AS_SOURCES = kernel/port/startup_stm32f429zi.s 
 
 LDSCRIPT = link/stm32f429zi.ld 
@@ -17,7 +17,7 @@ LDSCRIPT = link/stm32f429zi.ld
 MCU = -mcpu=cortex-m4 -mthumb -mfloat-abi=soft
 
 CFLAGS  = $(MCU) -Wall -Wextra -Og -g -ffreestanding -nostdlib
-CFLAGS += -I drivers/include -I kernel/port
+CFLAGS += -I drivers/include -I kernel/port -Ikernel/include
 ASFLAGS = $(MCU) -Wall
 LDFLAGS = $(MCU) -T$(LDSCRIPT) -nostdlib -nostartfiles -Wl,--gc-sections -Wl,-Map=$(BUILD)/$(TARGET).map
 
