@@ -14,10 +14,13 @@ jobs:
     - name: checkout code
       uses: actions/checkout@v4
 
-    - name: install arm compiler
+    - name: install arm compiler + qemu
       run: |
         sudo apt-get update
-        sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi
+        sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi qemu-system-arm
 
     - name: build
       run: make
+      
+    - name: build-qemu
+      run: timeout 60s make qemu || [ $? -eq 124 ]
