@@ -15,3 +15,8 @@ make          # build
 make flash    # flash to board
 make clean    # clean build files
 ```
+
+### Contributors
+<a href="https://github.com/vedantmalkar/AstraRTOS/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vedantmalkar/AstraRTOS&max=800&columns=24&anon=0" />
+</a>
