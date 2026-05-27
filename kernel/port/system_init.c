@@ -5,6 +5,7 @@
 volatile uint32_t system_ticks = 0;
 
 void system_init(void){
+    SCB_CPACR |= (0xF << 20);
     RCC_CR = RCC_CR | (1 << 16); // enable HSE clock using HSEON flag 
     while(!(RCC_CR & (1 << 17))); // wait for ready flag to become 1 (HSERDY)
     

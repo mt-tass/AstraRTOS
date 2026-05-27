@@ -14,6 +14,7 @@
 #define STK_LOAD (*(volatile uint32_t *)(SYSTICK_BASE + 0x04))
 #define STK_VAL (*(volatile uint32_t *)(SYSTICK_BASE + 0x08))
 #define STK_CALIB (*(volatile uint32_t *)(SYSTICK_BASE + 0x0C)) 
+#define SCB_CPACR (*(volatile uint32_t*)0xE000ED88)
 
 extern volatile uint32_t system_ticks;
 

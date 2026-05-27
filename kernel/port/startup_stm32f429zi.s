@@ -2,7 +2,7 @@
 
 .syntax unified
 .cpu cortex-m4
-.fpu softvfp
+.fpu fpv4-sp-d16
 .thumb
 
 .section .isr_vector, "a", %progbits    /* vector table */
@@ -25,8 +25,16 @@ _vector_table:
     .word 0                  /* 0x34: Reserved */
     .word PendSV_Handler     /* 0x38: PendSV - context switch */
     .word SysTick_Handler    /* 0x3C: SysTick -  RTOS tick */
-    .rept 37
+    .rept 6
     .word default            /* Default Handlers */
+    .endr
+    .word EXTI0_IRQHandler
+    .rept 9
+    .word default
+    .endr
+    .word DMA1_Stream5_IRQHandler
+    .rept 20
+    .word default
     .endr
     .word USART1_IRQHandler /* 0xD4: IRQ Handler for USART1 */
     .word USART2_IRQHandler /* 0xD8: IRQ Handler for USART2 */
@@ -78,6 +86,8 @@ hang:
 .weak default
 .weak USART1_IRQHandler
 .weak USART2_IRQHandler
+.weak EXTI0_IRQHandler
+.weak DMA1_Stream5_IRQHandler
 
 NMI_Handler:
 HardFault_Handler:
@@ -88,6 +98,8 @@ SysTick_Handler:
 default:
 USART1_IRQHandler:
 USART2_IRQHandler:
+EXTI0_IRQHandler:
+DMA1_Stream5_IRQHandler:
     b .
 
 .extern os_current_task_ptr
@@ -98,7 +110,7 @@ SVC_Handler:
     ldr r3, =os_current_task_ptr
     ldr r1, [r3]
     ldr r0, [r1]
-    ldmia r0!, {r4-r11}
+    ldmia r0!, {r4-r11 , r14}
     msr psp, r0
     mov r0, #0
     msr basepri, r0
@@ -108,7 +120,10 @@ SVC_Handler:
 .type PendSV_Handler, %function
 PendSV_Handler:
     mrs r0, psp
-    stmdb r0!, {r4-r11}
+    tst r14, #0x10
+    it eq
+    vstmdbeq r0!, {s16-s31}
+    stmdb r0!, {r4-r11 , r14}
     ldr r1, =os_current_task_ptr
     ldr r2, [r1]
     str r0, [r2]
@@ -118,6 +133,9 @@ PendSV_Handler:
     ldr r1, =os_current_task_ptr
     ldr r2, [r1]
     ldr r0, [r2]
-    ldmia r0!, {r4-r11}
+    ldmia r0!, {r4-r11 , r14}
+    tst r14, #0x10
+    it eq
+    vldmiaeq r0!, {s16-s31}
     msr psp, r0
     bx r14

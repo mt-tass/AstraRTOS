@@ -11,5 +11,6 @@ typedef struct semaphore
 void os_sem_init(os_sem_t *sem, int initial_count, int max_count);
 void os_sem_take(os_sem_t *sem);
 void os_sem_give(os_sem_t *sem);
+void os_sem_give_from_isr(os_sem_t *sem);
 
 #endif

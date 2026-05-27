@@ -28,8 +28,9 @@ int os_task_create(void (*task_function)(void), uint32_t priority , uint32_t sta
     *task_stack_ptr = (uint32_t)task_function;
     task_stack_ptr -= 1;
     *task_stack_ptr = 0xFFFFFFFD;
-    task_stack_ptr -= 13;
-
+    task_stack_ptr -= 6;
+    *task_stack_ptr = 0xFFFFFFFD;
+    task_stack_ptr -= 8;
     task->stack_ptr = task_stack_ptr;
     task->task_num = os_task_count;
     task->state = TASK_READY;
