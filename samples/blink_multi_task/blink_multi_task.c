@@ -28,7 +28,7 @@ void task2(void) {
 int main(void) {
     system_init();
     systick_init();
-    uart_init();
+    uart_init(USART1_BASE);
     rcc_enable_gpio(GPIOG_EN);
     os_heap_init();
     os_task_create(task1, 2, 128);
