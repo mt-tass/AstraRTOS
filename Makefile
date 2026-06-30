@@ -9,15 +9,15 @@ SIZE = $(PREFIX)size 	   # prints table with sizes
 TARGET = astra
 BUILD = build
 
-C_SOURCES = app/main.c kernel/port/system_init.c drivers/src/rcc.c drivers/src/uart.c drivers/src/gpio.c kernel/src/task.c kernel/src/mutex.c kernel/src/sem.c kernel/src/heap.c kernel/src/stats.c kernel/src/timer.c kernel/src/queue.c
-AS_SOURCES = kernel/port/startup_stm32f429zi.s 
+C_SOURCES = app/main.c drivers/stm32f429zi/system_init.c drivers/stm32f429zi/rcc.c drivers/stm32f429zi/uart.c drivers/stm32f429zi/gpio.c kernel/src/task.c kernel/src/mutex.c kernel/src/sem.c kernel/src/heap.c kernel/src/stats.c kernel/src/timer.c kernel/src/queue.c
+AS_SOURCES = kernel/port/arm/cortex-m4/startup_stm32f429zi.s 
 
 LDSCRIPT = link/stm32f429zi.ld 
 
 MCU = -mcpu=cortex-m4 -mthumb -mfloat-abi=soft
 
 CFLAGS  = $(MCU) -Wall -Wextra -Og -g -ffreestanding -nostdlib
-CFLAGS += -I drivers/include -I kernel/port -Ikernel/include
+CFLAGS += -I drivers/stm32f429zi -I kernel/port -Ikernel/include
 ASFLAGS = $(MCU) -Wall
 LDFLAGS = $(MCU) -T$(LDSCRIPT) -nostdlib -nostartfiles -Wl,--gc-sections -Wl,-Map=$(BUILD)/$(TARGET).map
 
