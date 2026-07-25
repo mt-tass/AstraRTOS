@@ -38,6 +38,7 @@ _vector_table:
     .endr
     .word USART1_IRQHandler /* 0xD4: IRQ Handler for USART1 */
     .word USART2_IRQHandler /* 0xD8: IRQ Handler for USART2 */
+    .word USART3_IRQHandler /* 0xDC: IRQ Handler for USART3 */
 
 
 .section .text                  /* reset handler */
@@ -70,6 +71,7 @@ zero_bss:
     b zero_bss
 
 done_bss:
+    bl __libc_init_array
     /* call the main kernel */
     bl main
 
@@ -86,6 +88,7 @@ hang:
 .weak default
 .weak USART1_IRQHandler
 .weak USART2_IRQHandler
+.weak USART3_IRQHandler
 .weak EXTI0_IRQHandler
 .weak DMA1_Stream5_IRQHandler
 
@@ -98,6 +101,7 @@ SysTick_Handler:
 default:
 USART1_IRQHandler:
 USART2_IRQHandler:
+USART3_IRQHandler:
 EXTI0_IRQHandler:
 DMA1_Stream5_IRQHandler:
     b .
